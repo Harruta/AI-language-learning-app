@@ -1,16 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Language Learning App</title>
+    <title>AILLA</title>
+    <style>
+        #chatbox {
+            width: 1000px;
+            height: 400px;
+            border: 1px solid black;
+            overflow: auto;
+        }
+        #user_input {
+            width: 500px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#submit").click(function(){
+                var userText = $("#user_input").val();
+                $.post("/generate_response", {user_text: userText}, function(data){
+                    $("#chatbox").append("<p>User: " + userText + "</p>");
+                    $("#chatbox").append("<p>AI: " + data + "</p>");
+                    $("#user_input").val('');
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>Welcome to the Language Learning App!</h1>
-    <form action="/generate_response" method="post">
-        <label for="user_text">Enter your text:</label><br>
-        <input type="text" id="user_text" name="user_text"><br>
-        <input type="submit" value="Submit">
-    </form>
+    <div id="chatbox"></div>
+    <input type="text" id="user_input">
+    <button id="submit">Send</button>
 </body>
 </html>
